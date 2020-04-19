@@ -18,7 +18,7 @@ A basic example:
 ```c++
 #include "EditorConfig.h"
 
-QMap<QString, QString> settings = EditorConfig::getFileSettings("path/to/myfile.txt");
+EditorConfigSettings settings = EditorConfig::getFileSettings("path/to/myfile.txt");
 for(auto setting : settings.toStdMap()) {
     std::cout << qUtf8Printable(setting.first) << "=" << qUtf8Printable(setting.second) << std::endl;
 }
