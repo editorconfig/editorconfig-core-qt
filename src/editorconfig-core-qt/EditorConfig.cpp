@@ -140,6 +140,34 @@ static bool isNextElementStringList(QStringView pattern)
     return false;
 }
 
+static int findMatchingBrace(QStringView pattern)
+{
+    int braceCount = 0;
+    int i = 0;
+
+    while (i < pattern.size()) {
+        if (isNextElementLiteral(&pattern.data()[i])) {
+            // Skip any literals
+            i += 2;
+        }
+        else if (pattern[i] == '{') {
+            braceCount++;
+            i++;
+        }
+        else if (pattern[i] == '}') {
+            braceCount--;
+            if (braceCount == 0)
+                return i;
+            i++;
+        }
+        else {
+            i++;
+        }
+    }
+
+    return -1; // Not found
+}
+
 static QString patternToRegex(QStringView pattern)
 {
     QString regex;
@@ -184,36 +212,43 @@ static QString patternToRegex(QStringView pattern)
             data++;
         }
         else if (isNextElementStringList(data)) {
-            regex.append('(');
-            data++;
+            int len = findMatchingBrace(data);
 
-            int len = findNextUnescapedCharacter(data, '}');
-
-            QString rawList(data, len);
-
-            data += len;
-
-            QStringList stringList = rawList.split(',', QString::KeepEmptyParts);
-
-            bool hasEmptyElement = stringList.removeAll(QString("")) > 0;
-
-            regex.append(stringList.join('|'));
-
-            regex.append(')');
-
-            if (hasEmptyElement) {
-                regex.append('?');
+            if (len == -1) {
+                // No matching brace was found, so use the rest of the string as a literal
+                regex.append(QRegularExpression::escape(QString(data)));
+                break;
             }
+            else {
+                len--; // Drop off the last }
 
-            data++;
+                regex.append('(');
+                data++;
+
+                QString rawList(data, len);
+
+                data += len;
+
+                QStringList stringList = rawList.split(',', QString::KeepEmptyParts);
+
+                bool hasEmptyElement = stringList.removeAll(QString("")) > 0;
+
+                regex.append(stringList.join('|'));
+
+                regex.append(')');
+
+                if (hasEmptyElement) {
+                    regex.append('?');
+                }
+
+                data++;
+            }
         }
         else {
             regex.append(QRegularExpression::escape(data[0]));
             data++;
         }
     }
-
-    regex.append("$");
 
     return regex;
 }
@@ -283,7 +318,7 @@ EditorConfigSettings settingsFromConfigFile(const QString &ecFilePath, const QSt
                 }
 
                 QString regexString = QRegularExpression::escape(QFileInfo(inputFile).dir().canonicalPath());
-                regexString += patternToRegex(sectionName);
+                regexString += patternToRegex(sectionName) + '$';
 
                 QRegularExpression re(regexString);
                 if (re.isValid()) {
