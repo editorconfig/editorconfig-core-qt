@@ -20,9 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-TEMPLATE = subdirs
-CONFIG += ordered
-SUBDIRS = editorconfig-core-qt \
-    editorconfig-app
+HEADERS += $$PWD/EditorConfig.h
 
-editorconfig-app.depends = editorconfig-core-qt
+SOURCES += $$PWD/EditorConfig.cpp
+
+INCLUDEPATH += $$PWD

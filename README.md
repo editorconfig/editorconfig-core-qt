@@ -13,10 +13,22 @@ information on the file format and supported text editors, see the
 
 ## How to use EditorConfig Qt5 Core
 
-A basic example:
+To include the library files it is recommend that you add it as a git submodule to your project.
+
+```bash
+git submodule add git@github.com:editorconfig/editorconfig-core-qt.git editorconfig-core-qt
+```
+
+Then include the `EditorConfig.pri` file in your .pro project file.
+
+```qmake
+include(editorconfig-core-qt/EditorConfig.pri)
+```
+
+It can then be used within your Qt application.
 
 ```c++
-#include "EditorConfig.h"
+#include <EditorConfig>
 
 EditorConfigSettings settings = EditorConfig::getFileSettings("path/to/myfile.txt");
 for(auto setting : settings.toStdMap()) {
@@ -28,7 +40,7 @@ for(auto setting : settings.toStdMap()) {
 
 This has been developed with Qt 5.14, however previous versions *may* work. This has only been tested on Windows.
 
-1. Open `src/EditorConfig.pro` with Qt Creator
+1. Open `src/editorconfig-app/editorconfig-app.pro` with Qt Creator
 1. Build the release version (this will place the exe in a `build` directory in the root of this source code repository)
 1. Using (cmd|powershell), navigate to the `build` directory
 1. Execute `cmake ..`

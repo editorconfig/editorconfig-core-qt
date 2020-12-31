@@ -108,7 +108,7 @@ static bool isNextElementAllExceptSlash(QStringView pattern)
     return pattern.startsWith('*');
 }
 
-static bool isNextElementSequence(QStringView pattern)
+static bool isNextElementBrackets(QStringView pattern)
 {
     if (pattern.startsWith(QLatin1String("[!")) || pattern.startsWith(QLatin1String("["))) {
         int nextClosingBracket = findNextUnescapedCharacter(pattern, ']');
@@ -124,7 +124,7 @@ static bool isNextElementSequence(QStringView pattern)
     return false;
 }
 
-static bool isNextElementStringList(QStringView pattern)
+static bool isNextElementBraces(QStringView pattern)
 {
     if (pattern.startsWith(QLatin1String("{"))) {
         int nextClosingBrace = findNextUnescapedCharacter(pattern, '}');
@@ -168,7 +168,7 @@ static int findMatchingBrace(QStringView pattern)
     return -1; // Not found
 }
 
-static QString patternToRegex(QStringView pattern)
+static QString patternToRegex(QString &pattern)
 {
     QString regex;
 
@@ -195,7 +195,7 @@ static QString patternToRegex(QStringView pattern)
             regex.append("[^/]");
             data++;
         }
-        else if (isNextElementSequence(data)) {
+        else if (isNextElementBrackets(data)) {
             regex.append('[');
             data++;
 
@@ -211,7 +211,7 @@ static QString patternToRegex(QStringView pattern)
             regex.append(']');
             data++;
         }
-        else if (isNextElementStringList(data)) {
+        else if (isNextElementBraces(data)) {
             int len = findMatchingBrace(data);
 
             if (len == -1) {
@@ -229,7 +229,7 @@ static QString patternToRegex(QStringView pattern)
 
                 data += len;
 
-                QStringList stringList = rawList.split(',', QString::KeepEmptyParts);
+                QStringList stringList = rawList.split(',', Qt::KeepEmptyParts);
 
                 bool hasEmptyElement = stringList.removeAll(QString("")) > 0;
 
@@ -307,7 +307,7 @@ EditorConfigSettings settingsFromConfigFile(const QString &ecFilePath, const QSt
 
             if (sectionName.length() <= MAX_SECTION_NAME_LENGTH) {
                 if (isPatternRelativeToConfigFile(sectionName)) {
-                    // Make sre it starts with /
+                    // Make sure it starts with /
                     if (!sectionName.startsWith('/')) {
                         sectionName.prepend('/');
                     }

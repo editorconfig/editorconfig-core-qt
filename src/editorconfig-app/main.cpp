@@ -28,7 +28,7 @@
 
 #include <iostream>
 
-#include "EditorConfig.h"
+#include <EditorConfig>
 
 
 int main(int argc, char *argv[])
