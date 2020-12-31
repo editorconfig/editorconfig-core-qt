@@ -16,7 +16,7 @@ information on the file format and supported text editors, see the
 To include the library files it is recommend that you add it as a git submodule to your project.
 
 ```bash
-git submodule add git@github.com:editorconfig/editorconfig-core-qt.git editorconfig-core-qt
+git submodule add https://github.com/editorconfig/editorconfig-core-qt.git editorconfig-core-qt
 ```
 
 Then include the `EditorConfig.pri` file in your .pro project file.
