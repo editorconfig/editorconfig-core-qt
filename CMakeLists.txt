@@ -1,13 +1,34 @@
-# This file is used for testing only
+cmake_minimum_required(VERSION 3.20)
 
-# To perform the test, run `cmake .` at the root of the project tree followed
-# by ctest .
+project(editorconfig-core-qt
+    VERSION 0.1
+    DESCRIPTION "EditorConfig Qt5/6 core bindings"
+    LANGUAGES CXX
+)
 
-cmake_minimum_required(VERSION 2.6)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Do not check any compiler
-project(editorconfig-core-qt NONE)
+find_package(Qt6 COMPONENTS Core)
+if (NOT Qt6_FOUND)
+    find_package(Qt5 5.15 REQUIRED COMPONENTS Core)
+endif()
 
-enable_testing()
-set(EDITORCONFIG_CMD ${CMAKE_BINARY_DIR}/editorconfig-app.exe)
-add_subdirectory(tests)
+add_library(editorconfig-core-qt
+    EditorConfig.cpp
+    EditorConfig.h
+)
+
+target_link_libraries(editorconfig-core-qt PRIVATE Qt::Core)
+target_include_directories(editorconfig-core-qt PUBLIC .)
+
+option(EDITORCONFIG_QT_BUILD_CMD "Build executable to run EditorConfig tests" OFF)
+
+if (EDITORCONFIG_QT_BUILD_CMD)
+    add_executable(editorconfig-app src/editorconfig-app/main.cpp)
+    target_link_libraries(editorconfig-app PRIVATE editorconfig-core-qt Qt::Core)
+
+    enable_testing()
+    set(EDITORCONFIG_CMD ${CMAKE_BINARY_DIR}/editorconfig-app.exe)
+    add_subdirectory(tests)
+endif()
