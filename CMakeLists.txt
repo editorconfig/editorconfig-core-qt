@@ -14,10 +14,19 @@ find_package(Qt5 COMPONENTS Core Gui Network Widgets REQUIRED)
 set(EDITORCONFIG_CMD ${CMAKE_BINARY_DIR}/editorconfig-app.exe)
 #add_subdirectory(tests)
 
-add_library(editorconfig-core-qt
-    EditorConfig.cpp
-    EditorConfig.h
-)
+if (BUILD_STATIC)
+    set(CMAKE_STATIC_LIBRARY_SUFFIX "_static${CMAKE_STATIC_LIBRARY_SUFFIX}")
+    add_library(editorconfig-core-qt STATIC
+        EditorConfig.cpp
+        EditorConfig.h
+    )
+else()
+    add_library(editorconfig-core-qt SHARED
+        EditorConfig.cpp
+        EditorConfig.h
+    )
+endif()
+
 target_link_libraries(editorconfig-core-qt PRIVATE Qt5::Widgets )
 target_include_directories(editorconfig-core-qt PUBLIC . )
 target_include_directories(editorconfig-core-qt PRIVATE . )
