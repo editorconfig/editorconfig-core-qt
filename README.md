@@ -11,7 +11,7 @@ editors which allow this file format to be read and used by those editors.  For
 information on the file format and supported text editors, see the
 [EditorConfig website](http://editorconfig.org).
 
-## How to use EditorConfig Qt5 Core
+## How to use EditorConfig Qt5 Core (QMake)
 
 To include the library files it is recommend that you add it as a git submodule to your project.
 
@@ -35,6 +35,18 @@ for(auto setting : settings.toStdMap()) {
     std::cout << qUtf8Printable(setting.first) << "=" << qUtf8Printable(setting.second) << std::endl;
 }
 ```
+
+## How to use EditorConfig Qt5 Core (Cmake)
+
+The easiest way, should be to use CPM (https://github.com/cpm-cmake/CPM.cmake). Then,
+inside your application do:
+
+``` CMake
+# Or any other sha1 you want.
+CPMAddPackage("gh:editorconfig/editorconfig-core-qt#master")
+```
+
+The follow instructions for QMake for code integration.
 
 ## Development
 
