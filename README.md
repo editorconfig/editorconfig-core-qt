@@ -36,7 +36,7 @@ for(auto setting : settings.toStdMap()) {
 }
 ```
 
-## How to use EditorConfig Qt5 Core (Cmake)
+## How to use EditorConfig Qt5 Core (CMake)
 
 The easiest way, should be to use CPM (https://github.com/cpm-cmake/CPM.cmake). Then,
 inside your application do:
