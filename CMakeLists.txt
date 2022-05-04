@@ -9,7 +9,8 @@ project(editorconfig-core-qt
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 
 enable_testing()
 set(EDITORCONFIG_CMD ${CMAKE_BINARY_DIR}/src/editorconfig-app/editorconfig-app)
@@ -28,9 +29,9 @@ else()
     )
 endif()
 
-target_link_libraries(editorconfig-core-qt PRIVATE Qt5::Core )
+target_link_libraries(editorconfig-core-qt PRIVATE Qt::Core)
 target_include_directories(editorconfig-core-qt PUBLIC . )
 target_include_directories(editorconfig-core-qt PRIVATE . )
 
 add_executable(editorconfig-app src/editorconfig-app/main.cpp)
-target_link_libraries(editorconfig-app PRIVATE editorconfig-core-qt Qt5::Core)
+target_link_libraries(editorconfig-app PRIVATE editorconfig-core-qt Qt::Core)
