@@ -9,15 +9,17 @@ project(editorconfig-core-qt
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+find_package(Qt6 COMPONENTS Core)
+if (NOT Qt6_FOUND)
+    find_package(Qt5 5.15 REQUIRED COMPONENTS Core)
+endif()
 
 add_library(editorconfig-core-qt
     EditorConfig.cpp
     EditorConfig.h
 )
 
-target_link_libraries(editorconfig-core-qt PRIVATE Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(editorconfig-core-qt PRIVATE Qt::Core)
 target_include_directories(editorconfig-core-qt PUBLIC . )
 target_include_directories(editorconfig-core-qt PRIVATE . )
 
@@ -25,7 +27,7 @@ option(BUILD_EDITORCONFIG_CMD "Build executable to run EditorConfig tests" OFF)
 
 if (BUILD_EDITORCONFIG_CMD)
     add_executable(editorconfig-app src/editorconfig-app/main.cpp)
-    target_link_libraries(editorconfig-app PRIVATE editorconfig-core-qt Qt${QT_VERSION_MAJOR}::Core)
+    target_link_libraries(editorconfig-app PRIVATE editorconfig-core-qt Qt::Core)
 
     enable_testing()
     set(EDITORCONFIG_CMD ${CMAKE_BINARY_DIR}/editorconfig-app.exe)
