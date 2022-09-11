@@ -27,11 +27,12 @@
 
 #include <QString>
 #include <QMap>
+#include "editorconfig-core-qt-export.h"
 
 
 typedef QMap<QString, QString> EditorConfigSettings;
 
-class EditorConfig
+class EDITORCONFIG_CORE_QT_EXPORT EditorConfig
 {
 public:
     static EditorConfigSettings getFileSettings(const QString &filePath, const QString &configName = ".editorconfig");
