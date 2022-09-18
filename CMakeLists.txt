@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.20)
 include(GenerateExportHeader)
 
 project(editorconfig-core-qt
-        VERSION 0.0.1
-        DESCRIPTION "EditorConfig Qt5/6 core bindings"
-        LANGUAGES CXX
+    VERSION 0.0.1
+    DESCRIPTION "EditorConfig Qt5/6 core bindings"
+    LANGUAGES CXX
 )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -22,24 +22,24 @@ add_library(editorconfig-core-qt
 )
 
 target_link_libraries(editorconfig-core-qt
-  PRIVATE
+    PRIVATE
     Qt::Core
 )
 
 target_include_directories(editorconfig-core-qt
-  PUBLIC
+    PUBLIC
     .
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 generate_export_header(editorconfig-core-qt
-  EXPORT_FILE_NAME
+    EXPORT_FILE_NAME
     editorconfig-core-qt-export.h
 )
 
-option(BUILD_EDITORCONFIG_CMD "Build executable to run EditorConfig tests" OFF)
+option(EDITORCONFIG_QT_BUILD_CMD "Build executable to run EditorConfig tests" OFF)
 
-if (BUILD_EDITORCONFIG_CMD)
+if (EDITORCONFIG_QT_BUILD_CMD)
     add_executable(editorconfig-app src/editorconfig-app/main.cpp)
     target_link_libraries(editorconfig-app PRIVATE editorconfig-core-qt Qt::Core)
 

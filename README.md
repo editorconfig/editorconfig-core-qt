@@ -62,6 +62,5 @@ This has been developed with Qt 5.15+ however previous versions *may* work. To d
 1. Open `CMakeLists.txt` with Qt Creator
 1. Configure the project and set `BUILD_EDITORCONFIG_CMD` to `ON`
 1. Build the project
-1. Using (cmd|powershell), navigate to the output directory
-1. Execute `ctest`
+1. If ctests is configured for Qt Creator, it will run the tests
 1. The majority of tests should pass
