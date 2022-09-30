@@ -36,7 +36,6 @@ jobs:
         mkdir build
         cd build
         qmake ..\src\editorconfig-app\editorconfig-app.pro
-        cd build
         jom
 
     #- name: CMake Test
