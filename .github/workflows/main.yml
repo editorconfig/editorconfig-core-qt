@@ -41,12 +41,12 @@ jobs:
         jom
 
     - name: Linux qmake
-      if: runner.os == 'Linux'
+      if: runner.os == 'Linux' || runner.os == 'macOS'
       run: |
         mkdir build
         cd build
         qmake ../src/editorconfig-app/editorconfig-app.pro
-        make -j$(nproc)
+        make
 
     #- name: CMake Test
     #  run: |
