@@ -11,9 +11,9 @@ jobs:
     strategy:
       matrix:
         qt_version: [5.15.2, 6.2.4]
-        platform: [windows-latest]
+        os: [windows-latest, ubuntu-latest]
 
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
@@ -26,17 +26,27 @@ jobs:
         version: ${{ matrix.qt_version }}
 
     - name: Setup VS tools
+      if: runner.os == 'Windows'
       uses: egor-tensin/vs-shell@v2
       with:
         arch: x64
 
     - name: Windows qmake
+      if: runner.os == 'Windows'
       run: |
         choco install jom
         mkdir build
         cd build
         qmake ..\src\editorconfig-app\editorconfig-app.pro
         jom
+
+    - name: Linux qmake
+      if: runner.os == 'Linux'
+      run: |
+        mkdir build
+        cd build
+        qmake ../src/editorconfig-app/editorconfig-app.pro
+        make -j$(nproc)
 
     #- name: CMake Test
     #  run: |
