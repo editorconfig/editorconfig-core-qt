@@ -1,0 +1,50 @@
+name: "Build"
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        qt_version: [5.15.2, 6.2.4]
+        platform: [windows-latest]
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+          submodules: true
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: ${{ matrix.qt_version }}
+
+    - name: Setup VS tools
+      uses: egor-tensin/vs-shell@v2
+      with:
+        arch: x64
+
+    - name: Windows qmake
+      run: |
+        choco install jom
+        mkdir build
+        cd build
+        qmake ..\src\editorconfig-app\editorconfig-app.pro
+        cd build
+        jom
+
+    #- name: CMake Test
+    #  run: |
+    #    cd build
+    #    cmake ..
+
+    #- name: CTest
+    #  run: |
+    #    cd build
+    #    ctest -C Release -E "(braces_nested_start3|braces_nested_start4|braces_nested_end4|braces_nested_end5|braces_escaped_comma1|braces_patterns_nested2|braces_patterns_nested3|braces_patterns_nested5|braces_patterns_nested6|braces_patterns_nested8|braces_patterns_nested9|braces_numeric_range2|braces_numeric_range3|braces_numeric_range4|braces_numeric_range6|utf_8_char|indent_size_default_pre_0_9_0|lowercase_values1_ML|lowercase_values2_ML|min_supported_key_length|min_supported_value_length)"
