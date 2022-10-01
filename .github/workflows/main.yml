@@ -41,7 +41,7 @@ jobs:
         nmake
 
     - name: Windows cmake
-      if: runner.os == 'Windows' && matrix.tool == 'cqmake'
+      if: runner.os == 'Windows' && matrix.tool == 'cmake'
       run: |
         mkdir build
         cd build
