@@ -12,6 +12,7 @@ jobs:
       matrix:
         qt_version: [5.15.2, 6.2.4]
         os: [windows-latest, ubuntu-latest, macOS-latest]
+        tool: [cmake, qmake]
 
     runs-on: ${{ matrix.os }}
 
@@ -32,21 +33,36 @@ jobs:
         arch: x64
 
     - name: Windows qmake
-      if: runner.os == 'Windows'
+      if: runner.os == 'Windows' && matrix.tool == 'qmake'
       run: |
-        choco install jom
         mkdir build
         cd build
         qmake ..\src\editorconfig-app\editorconfig-app.pro
-        jom
+        nmake
 
-    - name: Linux qmake
-      if: runner.os == 'Linux' || runner.os == 'macOS'
+    - name: Windows cmake
+      if: runner.os == 'Windows' && matrix.tool == 'cqmake'
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
+
+    - name: Linux/macOS qmake
+      if: (runner.os == 'Linux' || runner.os == 'macOS') && matrix.tool == 'qmake'
       run: |
         mkdir build
         cd build
         qmake ../src/editorconfig-app/editorconfig-app.pro
         make
+
+    - name: Linux/macOS cmake
+      if: (runner.os == 'Linux' || runner.os == 'macOS') && matrix.tool == 'cmake'
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
 
     #- name: CMake Test
     #  run: |
