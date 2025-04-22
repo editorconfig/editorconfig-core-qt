@@ -409,7 +409,7 @@ EditorConfigSettings EditorConfig::getFileSettings(const QString &filePath, cons
         try {
             EditorConfigSettings configFileSettings = settingsFromConfigFile(ecFilePath, absoluteFilePath);
 
-            // Config files higher up in the directory tree are applied first and can get overriden
+            // Config files higher up in the directory tree are applied first and can get overridden
             // by settings in lower (closer) config files, so prepend settings as we go up the directory tree.
             individualConfigFileSettings.prepend(configFileSettings);
 
